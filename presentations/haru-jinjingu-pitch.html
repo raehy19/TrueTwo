@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>하루진진거 — 해커톤 피치 덱 (2026 가정의 달)</title>
+
+<!-- Fonts: Archivo Black (display) + Space Grotesk (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+/* =========================================================
+   THEME (Bold Signal preset, customized for 하루진진거)
+   ========================================================= */
+:root {
+  --bg-primary: #161616;
+  --bg-gradient: radial-gradient(120% 100% at 0% 0%, #2a2a2a 0%, #161616 60%, #0e0e0e 100%);
+  --card-bg: #FF5722;
+  --card-bg-2: #ff7a3a;
+  --card-ink: #1a1a1a;
+
+  --accent-warm: #FF5722;
+  --accent-warm-2: #ff7a3a;
+  --accent-cool: #b8c0ff;
+  --accent-soft: #ffd2b8;
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,.78);
+  --text-muted: rgba(255,255,255,.5);
+  --rule: rgba(255,255,255,.18);
+
+  --font-display: 'Archivo Black', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: .9s;
+}
+
+/* =========================================================
+   BASE + viewport-base.css (mandatory)
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.slide {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  position: relative;
+  background: var(--bg-gradient);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(20px, 3.5vw, 56px);
+  padding: clamp(24px, 4vw, 56px) clamp(24px, 4vw, 56px);
+}
+.slide.solo { grid-template-columns: 1fr; }
+img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+@media (max-height: 700px) { :root { --duration: .65s; } }
+@media (max-height: 600px) { .nav-dots, .keyboard-hint, .decorative { display: none; } }
+@media (max-width: 720px) {
+  .slide { grid-template-columns: 1fr; gap: clamp(16px, 3vw, 28px); }
+  .meta { order: 1; }
+  .card { order: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.2s !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* =========================================================
+   COMMON SLIDE PARTS
+   ========================================================= */
+.meta {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(20px, 3vh, 40px);
+  position: relative; z-index: 2;
+  min-width: 0;
+}
+.num {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.num small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(.6rem, .85vw, .8rem);
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  margin-top: .8em;
+  color: var(--text-muted);
+}
+.title { align-self: end; display: grid; gap: clamp(14px, 2.4vh, 24px); }
+.title h2, .title h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6.2vw, 5.8rem);
+  line-height: .92;
+  letter-spacing: -.025em;
+}
+.title h1 { font-size: clamp(3rem, 7.5vw, 6.8rem); }
+.title .accent { color: var(--accent-warm); display: inline-block; }
+.tag {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(.95rem, 1.35vw, 1.2rem);
+  line-height: 1.45;
+  max-width: 38ch;
+  color: var(--text-secondary);
+}
+.bottom-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: clamp(.6rem, .85vw, .78rem);
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 1em;
+}
+.bottom-row .crumb b { color: #fff; opacity: 1; font-weight: 500; }
+.bottom-row .crumb .sep { opacity: .35; padding: 0 .35em; }
+
+/* =========================================================
+   CARD
+   ========================================================= */
+.card {
+  position: relative;
+  background: linear-gradient(150deg, var(--card-bg) 0%, var(--card-bg-2) 100%);
+  border-radius: clamp(14px, 1.6vw, 22px);
+  color: var(--card-ink);
+  padding: clamp(22px, 3.2vw, 44px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -25px rgba(0,0,0,.55);
+  z-index: 2;
+  min-width: 0;
+}
+.card::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(transparent 0 calc(100% - 1px), rgba(0,0,0,.18) 100%),
+    linear-gradient(90deg, transparent 0 calc(100% - 1px), rgba(0,0,0,.18) 100%);
+  background-size: clamp(28px,3vw,40px) clamp(28px,3vw,40px);
+  opacity: .22; pointer-events: none;
+}
+.card .kicker {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(.7rem, .95vw, .9rem);
+  letter-spacing: .35em;
+  text-transform: uppercase;
+}
+.card .headline {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.6vw, 4.2rem);
+  line-height: .94;
+  letter-spacing: -.02em;
+  margin-top: clamp(8px, 1.4vh, 16px);
+}
+.card .body {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(.95rem, 1.25vw, 1.1rem);
+  line-height: 1.45;
+  margin-top: clamp(14px, 2vh, 22px);
+}
+.card .deck {
+  display: flex; gap: clamp(8px, 1vw, 14px);
+  margin-top: clamp(16px, 2.4vh, 28px);
+  flex-wrap: wrap;
+}
+.chip {
+  background: rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.18);
+  color: var(--card-ink);
+  font-size: clamp(.65rem, .9vw, .78rem);
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: .55em .85em;
+  border-radius: 999px;
+}
+.cta {
+  align-self: end;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(.85rem, 1.05vw, 1rem);
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: .6em;
+  border-top: 1px solid rgba(0,0,0,.25);
+  padding-top: 1em; margin-top: 1.2em;
+}
+.cta .arrow { display: inline-block; width: 1.6em; height: 1px; background: currentColor; position: relative; }
+.cta .arrow::after {
+  content: ""; position: absolute; right: 0; top: -.32em;
+  border: 1px solid currentColor; border-left: 0; border-bottom: 0;
+  width: .55em; height: .55em; transform: rotate(45deg) translateY(-.05em);
+}
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--duration) var(--ease-out-expo), transform var(--duration) var(--ease-out-expo);
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.slide.visible .reveal:nth-of-type(1) { transition-delay: .05s; }
+.slide.visible .reveal:nth-of-type(2) { transition-delay: .18s; }
+.slide.visible .reveal:nth-of-type(3) { transition-delay: .3s; }
+.slide.visible .reveal:nth-of-type(4) { transition-delay: .42s; }
+.slide.visible .reveal:nth-of-type(5) { transition-delay: .54s; }
+.slide.visible .reveal:nth-of-type(6) { transition-delay: .66s; }
+.card.reveal { transform: translateY(36px) scale(.985); }
+.slide.visible .card.reveal { transform: translateY(0) scale(1); }
+
+/* =========================================================
+   PROGRESS / NAV
+   ========================================================= */
+.progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  z-index: 50; background: rgba(255,255,255,.06);
+}
+.progress-bar .bar {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--accent-warm), var(--accent-warm-2));
+  transition: width .25s ease;
+}
+.nav-dots {
+  position: fixed; right: clamp(14px, 2vw, 28px); top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: clamp(8px, 1vh, 12px);
+  z-index: 50;
+}
+.nav-dots button { appearance: none; background: transparent; border: 0;
+  width: clamp(18px, 2vw, 24px); height: clamp(18px, 2vw, 24px);
+  display: grid; place-items: center; cursor: pointer; }
+.nav-dots button .dot { width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.3); transition: all .25s; }
+.nav-dots button.active .dot { background: var(--accent-warm); transform: scale(1.6); }
+.keyboard-hint {
+  position: fixed; left: clamp(14px, 2vw, 24px); bottom: clamp(14px, 2vw, 24px);
+  font-family: var(--font-mono); font-size: clamp(.6rem, .8vw, .72rem);
+  color: var(--text-muted); letter-spacing: .15em; text-transform: uppercase;
+  z-index: 50;
+}
+
+/* Slide-specific */
+.bigstat {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7.5vw, 6rem);
+  line-height: .9;
+  color: var(--accent-warm);
+  margin-bottom: .25em;
+}
+.bigstat small {
+  font-family: var(--font-body); font-weight: 500; font-size: clamp(.8rem, 1vw, .95rem);
+  display: block; color: var(--text-muted); letter-spacing: .25em; text-transform: uppercase; margin-top: .4em;
+}
+.three-quotes { display: grid; gap: clamp(12px, 1.6vh, 18px); margin-top: clamp(14px, 2.2vh, 22px); }
+.three-quotes li {
+  list-style: none;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: clamp(.85rem, 1.1vw, 1rem); line-height: 1.4;
+  color: var(--text-secondary);
+  padding-left: 1.1em; position: relative;
+}
+.three-quotes li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: .55em; height: 1px; background: var(--accent-warm);
+}
+.three-quotes li strong { color: #fff; font-weight: 600; }
+
+.loop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(12px, 1.5vw, 18px);
+  margin-top: clamp(14px, 2vh, 22px);
+}
+.loop .step {
+  background: rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.22);
+  border-radius: 14px;
+  padding: clamp(14px, 1.6vw, 18px);
+  display: grid; gap: .35em;
+  color: var(--card-ink);
+}
+.loop .step .n { font-family: var(--font-mono); font-weight: 700;
+  font-size: clamp(.7rem, .9vw, .8rem); letter-spacing: .15em; }
+.loop .step .t { font-family: var(--font-display); font-size: clamp(.95rem, 1.25vw, 1.15rem); line-height: 1.2; }
+.loop .step .d { font-size: clamp(.78rem, 1vw, .9rem); line-height: 1.4; opacity: .8; }
+
+.phone {
+  position: relative;
+  margin: 0 auto;
+  width: clamp(220px, 26vw, 320px);
+  aspect-ratio: 9 / 17;
+  border-radius: clamp(22px, 2.8vw, 36px);
+  background: #0b0b0b;
+  border: 2px solid rgba(255,255,255,.14);
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,.6);
+  overflow: hidden;
+  display: grid; grid-template-rows: auto 1fr;
+}
+.phone .top { height: clamp(20px, 2.2vw, 28px); background: #0b0b0b; position: relative; }
+.phone .top::after {
+  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 25%; height: 50%; background: #000; border-radius: 999px;
+}
+.phone .scr {
+  background:
+    radial-gradient(80% 60% at 80% 0%, rgba(255,87,34,.25), transparent 70%),
+    radial-gradient(60% 50% at 0% 100%, rgba(184,192,255,.18), transparent 70%),
+    #161616;
+  padding: clamp(12px, 1.4vw, 18px);
+  display: grid; grid-template-rows: auto 1fr auto; gap: clamp(8px, 1vh, 12px);
+  color: var(--text-primary);
+  font-size: clamp(.62rem, .82vw, .72rem);
+  line-height: 1.3;
+}
+.phone .scr .pt {
+  font-family: var(--font-mono); letter-spacing: .15em; text-transform: uppercase;
+  color: var(--text-muted); font-size: clamp(.55rem, .7vw, .62rem);
+}
+.phone .scr h3 { font-family: var(--font-display); font-size: clamp(.8rem, 1.1vw, .98rem); letter-spacing: -.01em; }
+.phone .opts { display: grid; gap: clamp(6px, .8vh, 8px); }
+.phone .opt {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: clamp(8px, 1vh, 10px) clamp(10px, 1vw, 12px);
+  font-size: clamp(.6rem, .8vw, .72rem);
+  position: relative;
+  display: grid; grid-template-columns: auto 1fr auto; gap: .5em; align-items: center;
+}
+.phone .opt::before {
+  content: ""; width: 12px; height: 12px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+}
+.phone .opt.true { background: rgba(184,192,255,.14); border-color: rgba(184,192,255,.4); }
+.phone .opt.true::before { background: var(--accent-cool); border-color: var(--accent-cool); }
+.phone .opt.fake { background: rgba(255,87,34,.18); border-color: rgba(255,87,34,.55); }
+.phone .opt.fake::before { background: var(--accent-warm); border-color: var(--accent-warm); }
+.phone .opt .badge {
+  font-family: var(--font-mono); font-size: clamp(.5rem, .65vw, .58rem);
+  letter-spacing: .12em; opacity: .85;
+}
+.phone .ai {
+  background: rgba(255,255,255,.05);
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: 10px;
+  padding: clamp(8px, 1vh, 10px);
+  font-size: clamp(.55rem, .72vw, .65rem);
+  color: var(--text-secondary);
+}
+.phone .ai b { color: var(--accent-warm); font-weight: 700; }
+.phone .qchips { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.phone .qchip {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: clamp(.5rem, .65vw, .58rem);
+  color: var(--text-secondary);
+}
+
+.featlist { display: grid; gap: clamp(10px, 1.4vh, 16px); margin-top: clamp(12px, 1.8vh, 20px); }
+.featlist li {
+  list-style: none;
+  display: grid; grid-template-columns: auto 1fr; gap: clamp(10px, 1.2vw, 16px);
+  align-items: start;
+  font-size: clamp(.85rem, 1.1vw, 1rem);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.featlist li .badge {
+  font-family: var(--font-mono); font-weight: 700;
+  font-size: clamp(.6rem, .8vw, .72rem);
+  letter-spacing: .12em;
+  background: var(--accent-warm); color: var(--card-ink);
+  padding: .35em .55em; border-radius: 4px; line-height: 1; align-self: start;
+  margin-top: .15em;
+}
+.featlist li b { color: #fff; font-weight: 600; }
+
+.stack {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 1vw, 16px);
+  margin-top: clamp(14px, 2vh, 22px);
+  font-family: var(--font-mono);
+  font-size: clamp(.65rem, .85vw, .78rem);
+  color: var(--card-ink);
+}
+.stack .row { display: contents; }
+.stack .k { opacity: .55; letter-spacing: .12em; text-transform: uppercase; }
+.stack .v { font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="bar" id="bar"></div></div>
+<nav class="nav-dots" id="navDots" aria-label="슬라이드 네비게이션"></nav>
+<div class="keyboard-hint">↓ · space · click ›</div>
+
+
+<!-- ========== SLIDE 1 — TITLE ========== -->
+<section class="slide title-slide" data-title="하루진진거">
+  <div class="meta">
+    <div class="num reveal">01<small>HARU JINJINGUH · 2026 가정의 달</small></div>
+    <div class="title">
+      <h1 class="reveal">가족의 하루,<br/><span class="accent">3개 중 1개</span>는<br/>가짜다.</h1>
+      <p class="tag reveal">하루진진거 — 매일 한 사람의 진진거 한 판으로, 가족의 진짜 하루를 발견하는 데일리 가족 게임.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb"><b>01 PROBLEM</b><span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+      <span>HARU JINJINGUH</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">하루진진거 · 한 줄 정의</div>
+      <div class="headline">진짜 2,<br/>가짜 1.</div>
+      <p class="body">가족은 거짓을 맞히러 들어오지만, 결국 서로의 진짜 하루를 알게 된다.</p>
+      <div class="deck">
+        <span class="chip">가족 데일리</span>
+        <span class="chip">AI + 사람</span>
+        <span class="chip">5분 안에 시작</span>
+      </div>
+    </div>
+    <div class="cta">맞히러 들어와서<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 2 — PROBLEM ========== -->
+<section class="slide" data-title="문제">
+  <div class="meta">
+    <div class="num reveal">02<small>PROBLEM · 가족 단톡방의 한계</small></div>
+    <div class="title">
+      <h2 class="reveal">"오늘 어땠어?"<br/>로는 <span class="accent">아무 것도</span><br/>알 수 없다.</h2>
+      <p class="tag reveal">같이 살아도 가족은 서로의 하루를 모른다. 단톡방에는 음식 사진과 뉴스 링크만 오간다. 자녀는 답하지 않고, 부모는 잔소리로 들릴까 묻기를 멈춘다.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+      <span>02 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">우리가 듣는 답</div>
+      <div class="bigstat">"그냥<br/>똑같지 뭐."<small>가족 안에서 가장 많이 오가는 답</small></div>
+      <ul class="three-quotes">
+        <li><strong>엄마</strong> — 잔소리로 비치지 않을 핑계가 필요하다.</li>
+        <li><strong>자녀</strong> — 물어봐도 어차피 모른다고 생각해 말하지 않는다.</li>
+        <li><strong>가족</strong> — 함께 쓸 가벼운 데일리 의식이 사실상 없다.</li>
+      </ul>
+    </div>
+    <div class="cta">그래서 자리를 만든다<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 3 — IDEA ========== -->
+<section class="slide" data-title="해법">
+  <div class="meta">
+    <div class="num reveal">03<small>IDEA · 진진거 메커니즘 + 하루</small></div>
+    <div class="title">
+      <h2 class="reveal">진짜 <span class="accent">2</span>개<br/>+ 가짜 <span class="accent">1</span>개,<br/>가족이 가짜를 맞힌다.</h2>
+      <p class="tag reveal">"투 트루스 앤 어 라이"라는 30년 검증된 사회적 게임을 가족용 데일리 의식으로 재설계. 단순 진진거가 아닌, "진짜 하루"를 발견하는 진진거.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+      <span>03 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">차별점</div>
+      <div class="headline">AI가 만들고,<br/>사람이 다듬는다.</div>
+      <p class="body">AI가 가족이 헷갈릴 만한 가짜 후보 3개를 즉시 제안하고, 사용자는 그 중 하나를 골라 직접 살을 붙인다. 매일 떠올릴 부담 없이도, 가족 톤이 살아 있다.</p>
+      <div class="deck">
+        <span class="chip">진짜 2 · 가짜 1</span>
+        <span class="chip">난이도 4단계</span>
+        <span class="chip">사람이 마지막 편집</span>
+      </div>
+    </div>
+    <div class="cta">5분 안에 첫 한 판<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 4 — CORE LOOP ========== -->
+<section class="slide solo" data-title="핵심 루프">
+  <div style="display:grid; grid-template-columns: minmax(0,1fr) minmax(0,2fr); gap: clamp(20px, 3.5vw, 56px); height: 100%;">
+    <div class="meta">
+      <div class="num reveal">04<small>CORE LOOP · 데일리 의식</small></div>
+      <div class="title">
+        <h2 class="reveal">하루 1판,<br/>등록 즉시 풀이.<br/><span class="accent">24시간</span> 안에 결과.</h2>
+        <p class="tag reveal">한 사용자는 하루 1판만 등록할 수 있다. 어제 놓쳤다면 오늘 백로그 1판 추가. 가족이 모두 풀거나 출제자가 공개하면 결과가 열린다.</p>
+      </div>
+      <div class="bottom-row reveal">
+        <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span><b>03 LOOP</b><span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+        <span>04 / 08</span>
+      </div>
+    </div>
+
+    <article class="card reveal" style="grid-template-rows: auto 1fr;">
+      <div>
+        <div class="kicker">7단계 데일리 루프</div>
+        <div class="headline" style="font-size: clamp(1.6rem, 3.4vw, 2.6rem);">출제 → 다듬기 → 풀이 → 결과 → 진짜 하루 질문 → 공유 → 랭킹</div>
+      </div>
+      <ol class="loop" style="padding: 0;">
+        <li class="step"><span class="n">01</span><span class="t">진짜 2개 입력</span><span class="d">출제자가 오늘 있었던 일을 두 줄.</span></li>
+        <li class="step"><span class="n">02</span><span class="t">AI 가짜 후보 3안</span><span class="d">난이도 1~4. 리롤 최대 2회.</span></li>
+        <li class="step"><span class="n">03</span><span class="t">사람이 다듬기</span><span class="d">마지막 편집권은 항상 사람.</span></li>
+        <li class="step"><span class="n">04</span><span class="t">가족 풀이</span><span class="d">셔플된 3개 중 가짜 추리 + 한 줄 이유.</span></li>
+        <li class="step"><span class="n">05</span><span class="t">결과 + 진짜 하루 질문</span><span class="d">진짜였던 두 일을 후속 질문 칩으로 노출.</span></li>
+        <li class="step"><span class="n">06</span><span class="t">남의 집 진진거 공유</span><span class="d">동의 + AI 익명화 후 게시판으로.</span></li>
+      </ol>
+    </article>
+  </div>
+</section>
+
+
+<!-- ========== SLIDE 5 — DEMO ========== -->
+<section class="slide" data-title="데모">
+  <div class="meta">
+    <div class="num reveal">05<small>DEMO · 결과 화면</small></div>
+    <div class="title">
+      <h2 class="reveal">정답은 끝이 아니라<br/><span class="accent">진짜 하루</span>의<br/>시작이다.</h2>
+      <p class="tag reveal">결과 화면은 누가 맞혔는지로 끝나지 않는다. 진짜였던 일 두 개에 대해 AI가 후속 질문 칩을 띄워, 가족 댓글로 자연스럽게 이어진다. 이게 "하루진진거"의 하루.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span><b>04 DEMO</b><span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+      <span>05 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal" style="background: linear-gradient(160deg,#1f1f1f 0%, #161616 100%); color:#fff;">
+    <div>
+      <div class="kicker" style="color: var(--accent-warm);">RESULT · 나의 진진거</div>
+      <div class="headline" style="color:#fff;">가족 3명 중<br/><span style="color: var(--accent-warm);">2명</span>이 맞혔다.</div>
+    </div>
+    <div style="display: grid; place-items: center; padding: clamp(12px, 2vh, 22px) 0;">
+      <div class="phone" aria-hidden="true">
+        <div class="top"></div>
+        <div class="scr">
+          <div>
+            <div class="pt">결과 · 나의 진진거</div>
+            <h3>진짜는 ✅, 가짜는 ❌</h3>
+          </div>
+          <div class="opts">
+            <div class="opt true"><span></span><span>회의에서 발표 칭찬받음</span><span class="badge">TRUE</span></div>
+            <div class="opt true"><span></span><span>점심 못 먹고 커피 4잔</span><span class="badge">TRUE</span></div>
+            <div class="opt fake"><span></span><span>퇴근길 초등 친구 우연 만남</span><span class="badge">FAKE</span></div>
+          </div>
+          <div>
+            <div class="ai"><b>AI 코멘트</b> · 가족 3명 중 2명이 맞혔어요. 점심 거르고 커피 4잔은 진짜라 엄마가 걱정합니다.</div>
+            <div class="qchips">
+              <span class="qchip">어떤 발표였길래?</span>
+              <span class="qchip">점심 왜 못 먹었어?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta" style="color: var(--accent-warm); border-color: rgba(255,87,34,.35);">진짜 하루 질문이 댓글이 된다<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 6 — RANKING ========== -->
+<section class="slide" data-title="가족 랭킹">
+  <div class="meta">
+    <div class="num reveal">06<small>RANKING · 부드러운 다중 차원</small></div>
+    <div class="title">
+      <h2 class="reveal">정답률만 보면<br/>가족이 다친다.<br/><span class="accent">5종</span> 랭킹으로 분산.</h2>
+      <p class="tag reveal">아무도 일방적으로 비참해지지 않게, 점수를 다섯 가지 다른 차원으로 쪼갠다. 잘 맞힌 사람도 잘 속인 사람도 잘 반응한 사람도 모두 이번 주의 누군가가 된다.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span><b>05 RANK</b><span class="sep">·</span>06 BOARD<span class="sep">·</span>07 STATUS</span>
+      <span>06 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">이번 주 가족 랭킹</div>
+      <div class="headline" style="font-size: clamp(1.6rem, 3.6vw, 2.8rem);">탐정왕 / 거짓 설계자 / 순수한 마음상 / 리액션 장인 / 질문왕</div>
+      <ul class="featlist">
+        <li><span class="badge">탐정</span><span><b>가족 탐정</b> — 가짜를 가장 잘 맞힌 사람.</span></li>
+        <li><span class="badge">설계</span><span><b>거짓 설계자</b> — 본인 진진거에서 가족이 가장 많이 속은 사람.</span></li>
+        <li><span class="badge">마음</span><span><b>순수한 마음상</b> — 가장 자주 속은 사람을 부드럽게 호명.</span></li>
+        <li><span class="badge">반응</span><span><b>리액션 장인</b> + <b>질문왕</b> — 답글의 톤까지 점수화.</span></li>
+      </ul>
+    </div>
+    <div class="cta">+ 가족 케미 맵 NxN<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 7 — PUBLIC BOARD ========== -->
+<section class="slide" data-title="남의 집 진진거">
+  <div class="meta">
+    <div class="num reveal">07<small>PUBLIC · 남의 집 진진거 게시판</small></div>
+    <div class="title">
+      <h2 class="reveal">우리 집에서 끝내기엔<br/>아까운 한 컷,<br/><span class="accent">익명</span>으로 세상 밖으로.</h2>
+      <p class="tag reveal">결과 공개된 진진거를 출제자 동의 + AI 익명화로 게시판에 공유. 정답 인덱스는 서버에서만 비교, 가족 식별 정보는 보내지지 않는다. 신규 가족 유입 채널.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span><b>06 BOARD</b><span class="sep">·</span>07 STATUS</span>
+      <span>07 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">오늘의 레전드</div>
+      <div class="headline" style="font-size: clamp(1.6rem, 3.4vw, 2.6rem);">"아빠가 리모컨을<br/>냉장고에서 찾았다."</div>
+      <p class="body">속임률 0% — 가족 모두가 "이건 너무 아빠스러움"으로 정답을 맞혔다. 다른 가족도 78%가 맞혔지만 댓글은 28개.</p>
+      <div class="deck">
+        <span class="chip">👍 342</span>
+        <span class="chip">💬 28</span>
+        <span class="chip">정답 보기</span>
+      </div>
+    </div>
+    <div class="cta">"우리도 해볼까?"<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<!-- ========== SLIDE 8 — STATUS ========== -->
+<section class="slide" data-title="현재 상태">
+  <div class="meta">
+    <div class="num reveal">08<small>STATUS · 오늘 시연 가능</small></div>
+    <div class="title">
+      <h2 class="reveal">DB는 켜졌고,<br/>가족 1팀은 이미<br/><span class="accent">하루진진거</span>를 풀고 있다.</h2>
+      <p class="tag reveal">스키마·RLS·트리거·RPC + Next.js 15 핵심 흐름 적용 완료. 4명 가족 + 5건 진진거 + 14개 댓글 + 1건 공개 게시물 시드. 발표 종료 시점에 핵심 루프 시연.</p>
+    </div>
+    <div class="bottom-row reveal">
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span><b>07 STATUS</b></span>
+      <span>08 / 08</span>
+    </div>
+  </div>
+
+  <article class="card reveal">
+    <div>
+      <div class="kicker">스택 + 오늘의 진척</div>
+      <div class="headline" style="font-size: clamp(1.6rem, 3.4vw, 2.6rem);">하루진진거 v0.1<br/><span style="font-size: .55em;">spec → schema → seed → app</span></div>
+      <div class="stack">
+        <div class="row"><div class="k">FE</div><div class="v">Next.js 15 · App Router</div></div>
+        <div class="row"><div class="k">HOSTING</div><div class="v">Vercel</div></div>
+        <div class="row"><div class="k">BACKEND</div><div class="v">Supabase Postgres + RLS</div></div>
+        <div class="row"><div class="k">AUTH</div><div class="v">Email · Confirm OFF</div></div>
+        <div class="row"><div class="k">LLM</div><div class="v">Anthropic Haiku 4.5</div></div>
+        <div class="row"><div class="k">SEED</div><div class="v">콩가족 4명 · 진진거 5</div></div>
+      </div>
+    </div>
+    <div class="cta">가족이 들어오면 게임은 시작된다<span class="arrow"></span></div>
+  </article>
+</section>
+
+
+<script>
+/* =========================================================
+   SLIDE PRESENTATION CONTROLLER
+   ========================================================= */
+class SlidePresentation {
+  constructor() {
+    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.currentSlide = 0;
+    this.barEl = document.getElementById('bar');
+    this.navDotsContainer = document.getElementById('navDots');
+
+    this.setupIntersectionObserver();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupWheelNav();
+    this.setupNavDots();
+    this.updateProgress(0);
+  }
+  setupIntersectionObserver() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          entry.target.classList.add('visible');
+          const idx = this.slides.indexOf(entry.target);
+          if (idx >= 0) {
+            this.currentSlide = idx;
+            this.updateProgress(idx);
+            this.updateNavDots(idx);
+          }
+        }
+      });
+    }, { threshold: [0.5] });
+    this.slides.forEach(s => io.observe(s));
+  }
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target?.getAttribute && e.target.getAttribute('contenteditable') === 'true') return;
+      if (['ArrowDown',' ','PageDown','ArrowRight'].includes(e.key)) { e.preventDefault(); this.go(this.currentSlide + 1); }
+      else if (['ArrowUp','PageUp','ArrowLeft'].includes(e.key))     { e.preventDefault(); this.go(this.currentSlide - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); this.go(0); }
+      else if (e.key === 'End')  { e.preventDefault(); this.go(this.slides.length - 1); }
+    });
+  }
+  setupTouchNav() {
+    let startY = 0;
+    document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dy) > 60) this.go(this.currentSlide + (dy < 0 ? 1 : -1));
+    }, { passive: true });
+  }
+  setupWheelNav() {
+    let last = 0;
+    document.addEventListener('wheel', (e) => {
+      const now = Date.now();
+      if (now - last < 600) return;
+      if (Math.abs(e.deltaY) < 25) return;
+      last = now;
+      this.go(this.currentSlide + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: true });
+  }
+  setupNavDots() {
+    this.navDotsContainer.innerHTML = '';
+    this.slides.forEach((s, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', s.dataset.title || `슬라이드 ${i + 1}`);
+      btn.innerHTML = '<span class="dot"></span>';
+      btn.addEventListener('click', () => this.go(i));
+      if (i === 0) btn.classList.add('active');
+      this.navDotsContainer.appendChild(btn);
+    });
+  }
+  updateNavDots(idx) {
+    Array.from(this.navDotsContainer.children).forEach((b, i) => {
+      b.classList.toggle('active', i === idx);
+    });
+  }
+  updateProgress(idx) {
+    const pct = ((idx + 1) / this.slides.length) * 100;
+    this.barEl.style.width = pct + '%';
+  }
+  go(i) {
+    i = Math.max(0, Math.min(this.slides.length - 1, i));
+    this.slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+new SlidePresentation();
+</script>
+</body>
+</html>
