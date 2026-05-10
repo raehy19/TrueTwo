@@ -10,7 +10,10 @@ set check_function_bodies = off;
 -- =====================================================================
 -- 1. Extensions and schemas
 -- =====================================================================
-create extension if not exists pgcrypto;
+-- pgcrypto is already installed in the `extensions` schema on Supabase.
+-- We reference it as `extensions.gen_random_bytes` below to keep our function
+-- search_path tight (public, pg_temp).
+create extension if not exists pgcrypto with schema extensions;
 
 create schema if not exists private;
 create schema if not exists auditing;
@@ -64,9 +67,10 @@ declare
   i int;
 begin
   for i in 1..6 loop
+    -- 0..255에서 256/32=8 균등 구간만 사용 → 모듈로 편향 회피.
     loop
-      byte := get_byte(gen_random_bytes(1), 0);
-      exit when byte < 256; -- always true; placeholder for future bias rejection
+      byte := get_byte(extensions.gen_random_bytes(1), 0);
+      exit when byte < 32 * 8;
     end loop;
     result := result || substr(alphabet, 1 + (byte % 32), 1);
   end loop;
