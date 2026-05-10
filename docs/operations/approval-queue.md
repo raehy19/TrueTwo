@@ -54,6 +54,15 @@ Resolved items must not stay in the active list. The active list is only for
 - Risks: choosing the wrong license creates legal ambiguity or unintended reuse terms.
 - Affected areas: repository metadata, distribution, contribution policy
 
+### 6.1 Auth provider switch — Google OAuth → Email/Password (no verification)
+- Status: resolved
+- Opened: 2026-05-10
+- Resolved: 2026-05-10
+- Decision: 해커톤 일정 압축으로 Google OAuth 검수 시간을 확보할 수 없어, **Supabase Auth Email provider (Confirm email OFF)** 로 시작. 비밀번호 최소 8자. v1.1에서 Google OAuth 추가 검토. 자세한 사유는 [F1 spec](../specs/2026-05-10-auth-google-login.md) §변경 이력 참조.
+- Promoted to: [F1 spec](../specs/2026-05-10-auth-google-login.md), [ADR-0001](../architecture/adr/2026-05-10-tech-stack.md) §Decision 보강 노트, PRD §9 B-1.
+- Why it matters: Auth 결정은 가입 흐름·DB 트리거·환경 변수 모두에 영향.
+- Final option: Email/Password without confirmation.
+
 ### 6. AI provider selection (single vs multi-provider)
 - Status: open
 - Opened: 2026-05-10

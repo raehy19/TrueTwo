@@ -1578,14 +1578,14 @@ grant execute on function public.auto_reveal_expired()          to service_role;
 | 키 | 위치 | 용도 |
 |----|------|------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Vercel Project (모든 환경) | 클라이언트 + 서버 |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Vercel Project | 클라이언트(브라우저) |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Vercel Project | 클라이언트(브라우저). Supabase 신규 키 시스템의 publishable key. 기존 anon key를 사용하는 SDK 버전이라면 동일 값을 `NEXT_PUBLIC_SUPABASE_ANON_KEY`로도 제공한다. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Vercel Project (Sensitive) | 서버 전용. RPC 외 LLM 호출 결과 기록, 신고 처리 등에서 사용 |
 | `LLM_API_KEY` | Vercel Project (Sensitive) | LLM provider |
 | `LLM_MODEL` | Vercel Project | 모델 식별자 |
-| `APP_BASE_URL` | Vercel Project | OAuth redirect URL 구성 |
+| `APP_BASE_URL` | Vercel Project | 인증 redirect / 절대 URL 구성 |
 | `FAMILY_HASH_SALT` | Vercel Project (Sensitive) | `public_post.author_family_hash` 산출용 secret |
 
-> Supabase Auth 콘솔에서 Google provider를 켜고 redirect URL을 `${APP_BASE_URL}/auth/callback`로 설정한다.
+> Supabase Auth 콘솔에서 **Email provider만 활성화**하고 "**Confirm email**" 옵션을 OFF로 둔다(F1 spec과 일치). Google OAuth는 v1.1 후보.
 
 ---
 
@@ -1606,8 +1606,10 @@ grant execute on function public.auto_reveal_expired()          to service_role;
 
 ### Supabase 프로젝트 측
 - [ ] 프로젝트 region을 KST 사용자에 가까운 곳(Singapore/Tokyo)으로 생성.
-- [ ] Auth → Providers → **Google**만 활성화. Email/Password 비활성화.
-- [ ] Auth → URL Configuration: Site URL = `${APP_BASE_URL}`, Redirect URLs에 `${APP_BASE_URL}/auth/callback` 등록(프리뷰 와일드카드 포함: `https://*.vercel.app/auth/callback`).
+- [ ] Auth → Providers → **Email** provider만 활성화. Google/카카오/Apple 등 OAuth 모두 OFF.
+- [ ] Auth → Email → "Confirm email" 옵션 **OFF** (해커톤 단순화). 사용자가 가입 즉시 세션 발급.
+- [ ] Auth → Password Settings → 최소 길이 8자(F1 spec 일치).
+- [ ] Auth → URL Configuration: Site URL = `${APP_BASE_URL}`. (이메일 인증을 사용하지 않으므로 redirect URL은 비필수.)
 - [ ] SMTP 사용 안 함(MVP 이메일 발송 없음).
 - [ ] DB → Extensions: `pgcrypto` 활성화. `pg_cron` 활성화 가능하면 켜기.
 - [ ] Database → Backups: PITR 또는 일 단위 스냅샷 활성화.
@@ -1625,7 +1627,7 @@ grant execute on function public.auto_reveal_expired()          to service_role;
 - [ ] Vercel Region을 Supabase region과 동일하게 설정해 RTT 단축.
 
 ### 도메인 및 인증
-- [ ] Production 도메인을 Vercel에 연결, Google OAuth 동의 화면 검수 신청.
+- [ ] Production 도메인을 Vercel에 연결.
 - [ ] `robots.txt`로 게시판은 인덱싱 허용, 가족 안 화면은 차단.
 
 ---

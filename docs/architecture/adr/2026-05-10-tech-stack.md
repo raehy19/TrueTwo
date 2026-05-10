@@ -25,8 +25,10 @@ Status:
 - **A**를 채택한다. 구체적으로:
   - Next.js (App Router) + TypeScript, Tailwind + shadcn/ui.
   - Vercel을 호스팅. 미리보기 / 프로덕션 분리.
-  - Supabase: Postgres + Auth(Google OAuth) + RLS + Edge Functions 옵션 + Storage(미사용).
+  - Supabase: Postgres + Auth(Email/Password, **이메일 본인 인증 비활성**) + RLS + Edge Functions 옵션 + Storage(미사용).
   - LLM은 단일 공급사 1개로 시작. 모델 ID는 `LLM_MODEL` 환경 변수.
+
+> **Auth 후속 결정**: 초안에는 Google OAuth가 들어 있었으나, 해커톤 일정 압축 (OAuth 동의 화면 검수 + redirect URL 등록 시간 부족)으로 Email/Password(이메일 인증 없음)로 전환했다. 자세한 사유와 v1.1 마이그레이션 경로는 [F1 spec](../../specs/2026-05-10-auth-google-login.md) §변경 이력 참조.
 
 ## Why this option
 - **속도**: Auth, DB, RLS, 마이그레이션 도구가 한 콘솔에 묶여 5시간 데모에 필요한 부수적 의사결정을 0으로 만든다.
