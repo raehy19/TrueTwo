@@ -9,6 +9,11 @@ coverage/
 .turbo/
 .cache/
 tsconfig.tsbuildinfo
+
+# Agent/skill scratch
+.claude-design/
+.claude/scheduled_tasks.lock
+presentations/
 tmp/
 temp/
 *.log

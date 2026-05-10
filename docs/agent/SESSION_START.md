@@ -25,8 +25,11 @@ If a doc here disagrees with `AGENTS.md`, `AGENTS.md` wins.
 
 ## Current phase
 
-Phase 0 — product definition draft. No app code. Architecture and platform
-choices are drafted but still need approval-queue resolution before bootstrap.
+Phase 1 — implementation in progress (hackathon demo). Next.js 15 App Router +
+Tailwind 4 + Supabase (schema applied) + Anthropic `claude-haiku-4-5-20251001`.
+Routes live: landing, /login, /onboarding, /home, /family, /board (+ [id]),
+/quiz/new (3-step wizard), /quiz/[id]/play, /quiz/[id]/result. Route Handlers:
+/api/ai/lie-gen, /api/ai/comment.
 
 ## Active focus
 

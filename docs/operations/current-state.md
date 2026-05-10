@@ -4,11 +4,14 @@ Last updated:
 - 2026-05-10
 
 ## Current Phase
-- Phase 1. MVP spec locked. No application code yet. Ready to bootstrap Next.js + Supabase per ADR-0001 once P0 approval items resolve.
+- Phase 1 — implementation in progress (Hackathon demo build, 2026-05-10).
+  - Next.js 15 (App Router) + TypeScript + Tailwind 4 + Supabase + Anthropic stack live.
+  - Schema/seed already applied to remote Supabase project.
+  - LLM provider locked to Anthropic `claude-haiku-4-5-20251001` for MVP.
 
 ## Repository Status
 - Git-initialized on `master` (default branch may be renamed to `main` if/when ADR-0004 §"Rollback" applies).
-- No application code exists yet.
+- Hackathon demo MVP in active implementation.
 - Product direction, MVP scope, platform, and bootstrap strategy are all decided and routed via approval queue → ADR-0001..0004.
 - 진진거 brand, problem, F1–F8 specs, Supabase data model SoT, production safety review, and 5 E2E scenarios are all in place.
 - Verification automation (lefthook + markdownlint + lychee + gitleaks + GitHub Actions) configured but not necessarily installed locally yet.
