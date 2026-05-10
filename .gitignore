@@ -8,6 +8,7 @@ coverage/
 .next/
 .turbo/
 .cache/
+tsconfig.tsbuildinfo
 tmp/
 temp/
 *.log

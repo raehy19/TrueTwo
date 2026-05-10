@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  /* 진진거 brand palette — warm family ritual */
+  --color-paper: #fbf7ee;
+  --color-paper-soft: #f4eedf;
+  --color-paper-edge: #e8dfc7;
+  --color-ink: #1f1a2e;
+  --color-ink-soft: #4a4360;
+  --color-ink-faint: #8b8499;
+
+  --color-coral-50: #fff2ee;
+  --color-coral-100: #ffe1d6;
+  --color-coral-300: #ff9876;
+  --color-coral-500: #f25c2c;
+  --color-coral-600: #d94518;
+  --color-coral-700: #ad3413;
+
+  --color-mint-50: #effbf3;
+  --color-mint-300: #80dfa3;
+  --color-mint-500: #2bb368;
+  --color-mint-700: #1c7a47;
+
+  --color-mustard-50: #fff7e0;
+  --color-mustard-300: #ffd35f;
+  --color-mustard-500: #e8a92b;
+
+  --color-grape-50: #f4eefb;
+  --color-grape-300: #b794dc;
+  --color-grape-500: #794cb0;
+
+  --font-sans: "Pretendard", "Pretendard Variable", "-apple-system",
+    BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui,
+    sans-serif;
+  --font-display: "Pretendard", "Pretendard Variable", "-apple-system",
+    "Apple SD Gothic Neo", system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 0 rgba(31, 26, 46, 0.04),
+    0 8px 24px -8px rgba(31, 26, 46, 0.12);
+  --shadow-pop: 0 1px 0 rgba(31, 26, 46, 0.04),
+    0 16px 48px -16px rgba(31, 26, 46, 0.18);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "tnum";
+    letter-spacing: -0.01em;
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: var(--color-coral-100);
+    color: var(--color-coral-700);
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-feature-settings: inherit;
+  }
+}
+
+@layer utilities {
+  .ring-paper {
+    box-shadow: inset 0 0 0 1px var(--color-paper-edge);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Pretendard CDN */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/PretendardVariable.woff2")
+    format("woff2-variations");
+}
