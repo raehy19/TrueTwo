@@ -44,3 +44,20 @@ a full ADR but are worth keeping in one place.
 <!-- Link individual files added via /learning-add or manually. -->
 
 _None yet._
+
+## Project conventions (진진거 Phase 1 spec lock-in, 2026-05-10)
+
+### Documentation
+- 진진거 product / spec / brand docs are written in Korean; agent / ops / architecture docs stay in English. PRD section structure stays English-numbered for cross-linking. — 2026-05-10
+- The single source of truth for DB schema is `docs/architecture/data-model.md`. PRD Appendix A keeps a conceptual diagram only; conflicting details defer to data-model.md. — 2026-05-10
+
+### Architecture
+- All `INSERT`/`UPDATE`/`DELETE` against `public.*` go through `security definer` RPCs with `set search_path = public, pg_temp`, explicit `auth.uid()` and `is_family_member` checks, and `revoke all from public` + `grant execute to authenticated` (ADR-0004). — 2026-05-10
+- Anon and authenticated clients never `select` a base table that contains an answer-key column (`quiz_option.kind`, `public_post.false_option_index`, `public_post.family_id`). They use safe views (`quiz_option_safe_v`, `public_post_safe_v`). Game-integrity views always set `security_invoker = true`. — 2026-05-10
+- All "today" / "yesterday" / "week start" comparisons use `Asia/Seoul` self-evidently via `public.kst_today()` / `public.kst_yesterday()` / `public.kst_week_start(d)` (ADR-0003). Clients never compute day labels independently; they always read server-issued labels. — 2026-05-10
+- LLM cost is logged on every call to `auditing.llm_usage` with `(kind, model, prompt_tokens, output_tokens, cost_krw)`. Failed calls are not logged but must be retryable without consuming the user-visible counter. — 2026-05-10
+
+### Process
+- Production-safety findings live in `docs/architecture/data-model.md` §15. Every new feature must extend that table when it adds a privileged write path or anonymized read surface. — 2026-05-10
+- Open questions in spec / PRD frontmatter are tagged `OQ-*`. Items that block implementation must move to `docs/operations/approval-queue.md`; items that are accepted mitigations stay in spec. — 2026-05-10
+- `git commit` body never adds `Co-Authored-By` trailers (global rule). Conventional Commits with Korean body are accepted. — 2026-05-10
