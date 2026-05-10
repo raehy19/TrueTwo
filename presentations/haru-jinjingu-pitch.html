@@ -353,6 +353,8 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
   border: 1px solid rgba(0,0,0,.12);
   box-shadow: 0 20px 40px -18px rgba(0,0,0,.45);
 }
+/* wide variant for landscape sections (e.g. 가족 랭킹 4-card grid) */
+.shot.wide { aspect-ratio: 21 / 10; }
 .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 .shot .cap {
   position: absolute; left: 8px; bottom: 8px;
@@ -680,13 +682,13 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 
   <article class="card reveal">
     <div>
-      <div class="kicker">실제 화면 — 홈 + 가족</div>
+      <div class="kicker">실제 화면 — 이번 주 가족</div>
       <div class="headline" style="font-size: clamp(1.4rem, 2.8vw, 2rem);">탐정 · 거짓 설계자 · 순수한 마음상 · 리액션 장인 · 질문왕</div>
     </div>
-    <div class="shot-grid">
-      <div class="shot">
-        <img src="screenshots/01-home-me.png" alt="홈 화면 — 오늘 진진거, 풀어야 할 진진거, 최근 결과, 이번 주 가족 랭킹" />
-        <span class="cap">홈 · 가족 랭킹</span>
+    <div class="shot-grid" style="grid-template-columns: 1fr;">
+      <div class="shot wide">
+        <img src="screenshots/06-ranking-cards.png" alt="이번 주 가족 랭킹 — 탐정 동생 · 순수한 마음상 동생 · 리액션 장인 엄마 · 질문왕 엄마" />
+        <span class="cap">홈 · 이번 주 가족</span>
       </div>
       <div class="shot">
         <img src="screenshots/02-family.png" alt="가족 페이지 — 콩가족 코드 K7M3PQ + 멤버 4명" />
