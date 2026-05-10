@@ -1,167 +1,147 @@
-# Project Docs Starter
+# 하루진진거 (Haru JinJinGuh)
 
-이 폴더는 구현 전에 문서 운영체계부터 먼저 세팅하려는 프로젝트용 스타터다.
+> **가족은 거짓을 맞히러 들어오지만, 결국 서로의 진짜 하루를 알게 된다.**
 
-현재 상태:
-- 코드 없음
-- 이 스타터 폴더 자체는 Git 저장소로 관리 가능
-- 제품 도메인과 MVP 범위 미정
-- 문서 운영체계, 세션 복구 레이어, 검증 자동화 훅이 준비된 템플릿 상태
+매일 한 사람의 진진거 한 판(진짜 2개 + 가짜 1개)으로, 가족이 서로의 진짜 하루를 발견하게 만드는 데일리 가족 게임. 2026 가정의 달 시즌, 인디크루 해커톤 출품작.
 
-문서 언어 정책:
-- 에이전트가 직접 해석해야 하는 운영 문서와 규칙 문서는 영어로 유지
-- 제품 기획, 브리프, 사용자 관점 문서는 한국어 중심으로 유지
-- 혼합 문서는 구조와 제어 문구는 영어, 제품 내용은 한국어 우선
+---
 
-핵심 원칙:
-- 문서 우선, 구현 후행
-- 코드 변경과 문서 변경을 항상 함께 관리
-- 충돌하는 요구나 불명확한 의사결정은 추측하지 않고 승인 큐에 기록
-- 짧은 세션에서도 바로 이어갈 수 있도록 현재 상태를 지속적으로 문서화
-- 진입파일은 `AGENTS.md` 하나가 정본 (Codex/Cursor/Claude Code/Aider 등 공통 표준)
+## 한 줄 정의
 
-## 빠른 시작 (Quick Start)
+| 키 | 값 |
+|---|---|
+| **서비스** | 하루진진거 |
+| **메커닉** | 진진거 — 진짜 2 + 가짜 1을 가족이 맞히는 한 판 |
+| **차별점** | AI가 가짜 후보 3안을 만들고, 사람이 마지막에 다듬는다. 결과 후 "진짜 하루 질문" 칩으로 가족 대화로 이어진다. |
+| **포지션** | 단톡방을 대체하지 않는다 — 단톡방 위에 얹는 가벼운 데일리 의식. |
 
-이 스타터를 새 프로젝트로 가져오는 가장 안전한 방법은 **기존 `.git`을 가져오지 않는 것**이다. 다음 중 하나를 선택한다.
+---
 
-```sh
-# 1) degit (가장 간단, .git 자동 제거)
-npx degit <github-org>/<starter-repo> my-project
-cd my-project && git init -b main && git add . && git commit -m "chore: bootstrap from project-starter"
+## 데모로 보기
 
-# 2) GitHub CLI 템플릿 복사 (이 저장소를 GitHub Template으로 마킹한 경우)
-gh repo create my-project --template <github-org>/<starter-repo> --private --clone
-cd my-project
+- 🎯 **발표 덱 (HTML)**: [`presentations/haru-jinjingu-pitch.html`](presentations/haru-jinjingu-pitch.html) — 8슬라이드 피치, 브라우저에서 열기 (↓/space/click 으로 진행)
+- 📄 **발표 덱 (PDF)**: [`presentations/haru-jinjingu-pitch.pdf`](presentations/haru-jinjingu-pitch.pdf) — 이메일·Slack·Notion·인쇄용
+- 🌳 **DB는 이미 살아 있다** — 시드된 가족 1팀(콩가족 코드 `K7M3PQ`)이 진진거 5건과 댓글 14건, 공개 게시물 1건을 가지고 있음. 아래 4개 데모 계정 중 하나로 로그인.
 
-# 3) 수동 복사 (네트워크 없이)
-cp -R project-starter my-project
-cd my-project && rm -rf .git && git init -b main && git add . && git commit -m "chore: bootstrap"
-```
+### 데모 계정 (모두 비밀번호 `password123`)
 
-복사 직후 반드시 바꿔야 할 항목:
-1. 저장소 이름과 프로젝트명 (`<project-name>` 검색해 일괄 치환)
-2. `docs/operations/current-state.md`의 `Last updated` 날짜
-3. 제품 문제 정의와 1차 대상 사용자 (`docs/project/product-brief.md`)
-4. MVP 범위와 비범위
-5. 첫 플랫폼 범위
-6. 라이선스 선택 여부
+| 역할 | 이메일 | 시연 포인트 |
+|---|---|---|
+| 엄마 (가족 owner) | `mom@jinjin.demo` | 오늘치 open 진진거 출제자. 결과·랭킹·케미 맵·"지금 결과 공개" 흐름 확인용. |
+| 아빠 | `dad@jinjin.demo` | 본인 진진거 1건이 "남의 집 진진거" 게시판에 공유돼 있음. |
+| 동생 | `sis@jinjin.demo` | 본인 진진거 풀이 정답률 3/3. 풀이 시점 시연 추천. |
+| 나 | `me@jinjin.demo` | 풀이/댓글 흐름 시연 + 어제치 결과 화면 확인용. |
 
-검증 훅 설치 (선택, 코드가 들어오기 시작할 때 권장):
+> 새 가족을 만들고 싶다면 회원가입 후 `/onboarding` → "가족 만들기" 또는 위 코드 `K7M3PQ`로 가입.
 
-```sh
-brew install lefthook gitleaks lychee
-npm install -g markdownlint-cli
-lefthook install
-git config commit.template .gitmessage
-```
+---
 
-## 문서 시작점
-
-- [에이전트 정본 진입](AGENTS.md)
-- [세션 시작 한 장 요약](docs/agent/SESSION_START.md)
-- [에이전트 공용 워크플로](docs/agent/WORKFLOW.md)
-- [에이전트 문서 인덱스](docs/agent/INDEX.md)
-- [문서 거버넌스](docs/DOCUMENTATION_SYSTEM.md)
-- [문서 운영 맵](docs/README.md)
-- [기본 워크플로](docs/operations/workflow.md)
-- [프로젝트 부트스트랩 체크리스트](docs/operations/bootstrap-checklist.md)
-- [현재 상태 / 세션 복구](docs/operations/current-state.md)
-- [우선순위 TODO 계획](docs/operations/todo-plan.md)
-- [승인 대기 큐](docs/operations/approval-queue.md)
-- [E2E 시나리오 체크리스트](docs/qa/e2e-scenarios.md)
-- [기능 스펙 디렉토리](docs/specs/README.md)
-- [학습/컨벤션 누적](docs/learnings/README.md)
-- [비밀/MCP 권한 정책](docs/agent/SECRETS_POLICY.md)
-- [기존 리포에 하네스 적용 플레이북](docs/agent/APPLY_HARNESS.md)
-- [제품 브리프 초안](docs/project/product-brief.md)
-- [상태 보고서 정책](docs/agent/status_report.md)
-- [문서 템플릿](docs/templates/README.md)
-
-## 추천 시작 순서
-
-1. `AGENTS.md`와 `docs/agent/SESSION_START.md`를 먼저 읽는다.
-2. `docs/operations/bootstrap-checklist.md`를 따라간다.
-3. `docs/project/product-brief.md`를 채운다.
-4. `docs/operations/approval-queue.md`에서 미결정 항목을 정리한다.
-5. `docs/qa/e2e-scenarios.md`에 실제 핵심 흐름을 적는다.
-6. 핵심 기능마다 `/spec-new <title>`로 스펙을 먼저 만든다.
-7. 그 다음에만 아키텍처와 구현 계획으로 이동한다.
-
-## 에이전트와 첫 작업
-
-새 프로젝트로 복사한 직후, 에이전트(Claude Code / Codex / Cursor / Aider 등)에 아래 한 줄 중 하나를 던지면 컨텍스트가 자동으로 잡힌다. 각 어시스턴트의 진입파일이 `AGENTS.md`를 가리키므로 동일하게 동작한다.
+## 핵심 루프
 
 ```
-Read AGENTS.md and docs/agent/SESSION_START.md first.
-Summarize the current operating state and propose the safest next step.
-Do not write code yet.
+[1] 출제자가 진짜 2개 입력
+        ↓
+[2] AI가 가족이 헷갈릴 가짜 후보 3안 (난이도 1~4, 리롤 2회)
+        ↓
+[3] 사람이 마지막 편집 — "사람의 손길이 들어간 가짜"
+        ↓
+[4] 가족이 셔플된 3개 중 가짜 추리 + 한 줄 이유
+        ↓
+[5] 결과 공개 + AI 코멘트 + "진짜 하루 질문" 칩 2개
+        ↓ (선택)
+[6] AI 익명화 → 남의 집 진진거 게시판으로 확산
 ```
 
-부트스트랩을 같이 진행하고 싶을 때:
+핵심 비즈니스 규칙: 1인 1가족 · 하루 1판 · 어제 미등록 시 오늘 백로그 1판 추가 · 24시간 안에 자동 결과 공개 · 출제자 본인은 풀이 불가.
+
+---
+
+## 기술 스택
 
 ```
-Walk me through docs/operations/bootstrap-checklist.md one item at a time.
-For each unclear decision, append it to the approval queue with /approval-add
-instead of guessing.
+Frontend   Next.js 15 (App Router) + TypeScript + Tailwind 4
+Hosting    Vercel (Edge + Serverless)
+Auth/DB    Supabase Postgres + Row Level Security
+LLM        Anthropic Claude Haiku 4.5
+DB SoT     docs/architecture/data-model.md (14 tables · 7 RPC · 9 trigger)
 ```
 
-첫 기능 정의로 들어갈 때:
+DB 변경은 모두 `security definer` RPC를 통해서만 일어나고, 클라이언트는 base table에 직접 INSERT/UPDATE/DELETE할 수 없습니다 (RLS + revoke 잠금). 정답 컬럼(`quiz_option.kind`, `public_post.false_option_index`)은 안전 뷰로만 노출됩니다. 자세한 보안 검토는 [`docs/architecture/data-model.md`](docs/architecture/data-model.md) §15 Production Safety Review.
+
+---
+
+## 로컬에서 실행
+
+```bash
+# 1) 의존성
+pnpm install
+
+# 2) 환경 변수
+cp .env.example .env.local
+# - NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+# - SUPABASE_SERVICE_ROLE_KEY (Supabase Dashboard → Project Settings → API)
+# - ANTHROPIC_API_KEY (https://console.anthropic.com)
+# - FAMILY_HASH_SALT (openssl rand -base64 32)
+
+# 3) Supabase에 스키마 + seed 적용
+# - 새 Supabase 프로젝트라면 다음을 순서대로 실행 (SQL Editor 또는 supabase db push):
+#     supabase/migrations/20260510154500_init.sql
+#     supabase/migrations/20260510160000_harden_function_search_path_and_grants.sql
+#     supabase/seed.sql
+# - 위 키들이 가리키는 dev 프로젝트는 이미 적용돼 있음.
+
+# 4) 개발 서버
+pnpm dev   # http://localhost:3000
+```
+
+---
+
+## 디렉토리
 
 ```
-Read docs/specs/README.md, then run /spec-new "<feature title>"
-using the EARS template. Stop after the spec is drafted.
+src/                        Next.js 앱
+  app/(auth)/login          이메일/비밀번호 가입·로그인 (이메일 인증 없음)
+  app/onboarding            가족 만들기 / 가입 (6자리 코드)
+  app/(app)/home            홈 — 오늘 진진거 / 풀어야 할 진진거
+  app/(app)/quiz            등록 위저드, 풀이, 결과
+  app/(app)/family          가족 대시보드 (랭킹·케미 맵)
+  app/(app)/board           남의 집 진진거 게시판
+  app/api/ai                LLM Route Handler (Anthropic)
+  components/{ui,app-shell} 공통 UI
+  lib/supabase              @supabase/ssr 클라이언트 (browser/server/middleware)
+  lib/{anthropic,kst,...}   LLM 호출 / KST 일자 헬퍼
+
+supabase/
+  migrations/*.sql          스키마(init) + 보안 강화(harden) — apply_migration 적용 완료
+  seed.sql                  콩가족 4명 + 진진거 5건 + 댓글 14건 + 공개 게시물 1건
+
+docs/
+  project/                  product brief · brand positioning · PRD
+  specs/                    F1~F8 기능 스펙 (Gherkin / EARS)
+  architecture/             data-model SoT + ADR-0001..0004
+  qa/e2e-scenarios.md       5개 핵심 사용 여정
+
+presentations/
+  haru-jinjingu-pitch.html  발표 덱 (HTML, 애니메이션 포함)
+  haru-jinjingu-pitch.pdf   동일 내용 PDF 익스포트
 ```
 
-## 다른 기존 프로젝트에 이 하네스 적용하기
+---
 
-이 폴더는 새 프로젝트용 템플릿이지만, **이미 코드가 있는 기존 리포에 부분 적용**하는 참조 자료로도 동작한다. 에이전트가 이 폴더를 읽고 다른 작업 디렉토리에 옮겨 심는 절차는 [docs/agent/APPLY_HARNESS.md](docs/agent/APPLY_HARNESS.md)에 4단계(Audit → Plan → Apply → Verify)로 정리되어 있다.
+## 핵심 문서 빠른 링크
 
-대상 리포에서 에이전트에 다음과 같이 지시하면 된다.
+| 무엇 | 어디 |
+|---|---|
+| 한 줄 정의·MVP 범위 | [`docs/project/product-brief.md`](docs/project/product-brief.md) |
+| 브랜드 문장·문제 정의·톤 | [`docs/project/brand-positioning.md`](docs/project/brand-positioning.md) |
+| PRD (16섹션, B-1~B-12 비즈니스 규칙) | [`docs/project/PRD.md`](docs/project/PRD.md) |
+| F1~F8 기능 스펙 | [`docs/specs/`](docs/specs/) |
+| Supabase 데이터 모델 SoT (RLS·RPC·트리거·안전 뷰·프로덕션 안전 리뷰) | [`docs/architecture/data-model.md`](docs/architecture/data-model.md) |
+| ADR (스택/1인1가족/KST/RPC+RLS) | [`docs/architecture/adr/`](docs/architecture/adr/) |
+| 5개 핵심 E2E 시나리오 | [`docs/qa/e2e-scenarios.md`](docs/qa/e2e-scenarios.md) |
 
-```
-Apply the project-starter harness to this repo.
-Use <path-to-this-starter>/docs/agent/APPLY_HARNESS.md as your playbook.
-Audit first, then propose an adoption plan layer by layer, and only apply
-each layer with my approval. Do not overwrite existing tooling that already
-works (husky, commitlint, semantic-release, existing ADR folder, etc.).
-```
+---
 
-플레이북이 옮기는 것은 단순 파일이 아니라 **이 프로젝트의 운영 규율 자체**다.
+## 라이선스
 
-- 핵심 원칙 6가지: documentation-first / SSoT / approval-queue 규율 / 결정 레이어 분리(ADR·learning·queue·spec) / lean context / no-false-claims
-- 문서 거버넌스(`DOCUMENTATION_SYSTEM.md`) — 카테고리, 명명 규칙, archive, 충돌 처리, 결정 흐름
-- 에이전트 워크플로 / INDEX / SESSION_START 한 장 요약
-- 운영 4종 세트 — current-state / todo-plan / approval-queue (lifecycle 포함) / workflow / bootstrap-checklist
-- 문서 분류 폴더 — specs / architecture/adr / learnings / qa / status / templates / project / plans (대상에 이미 있으면 그쪽 경로 재사용)
-- 재사용 템플릿 8종 (ADR, plan, checkpoint, approval-item, status-report, learning, EARS spec, Gherkin spec)
-- 검증 자동화 (lefthook/husky 중 기존 채택, markdownlint, lychee, gitleaks, GH Actions)
-- 슬래시/커스텀 명령 + `AGENTS.md` `## Commands` 표
-- Conventional Commits + release-please (또는 기존 commitlint/semantic-release/changesets와 충돌 회피)
-- 비밀/MCP 정책 + 브라우저/로컬 레인 정책(해당될 때만)
-
-대상 리포에 이미 husky / commitlint / semantic-release / changesets / ADR 폴더 / RFC 폴더 등이 있으면 모두 우선 보존하고, 충돌 시에는 학습(`docs/learnings/`)에 사유를 남긴다. 스타터의 예시 승인 항목, product-brief, license 결정, "코드 작성 금지" 문구 등은 자동 임포트하지 않는다.
-
-플레이북 끝에는 **doc taxonomy cheat sheet**가 있어 "정보 X가 들어왔을 때 어느 문서로 라우팅하는가"가 한 장에 정리되어 있다.
-
-## 운영 슬래시 명령
-
-`.claude/commands/`에 정의되어 있고, 다른 어시스턴트에서는 `AGENTS.md`의 `## Commands` 표가 동일한 의미를 명시한다.
-
-| 명령 | 역할 |
-|------|------|
-| `/session-start` | `docs/agent/SESSION_START.md`를 운영 문서 기준으로 갱신 |
-| `/checkpoint` | A–E 체크포인트 작성 + `current-state.md` 갱신 |
-| `/approval-add <title>` | 승인 큐에 항목 추가 (자동 채번) |
-| `/approval-resolve <id> <decision>` | 큐 항목 닫기 + ADR/learning 라우팅 |
-| `/promote-to-adr <id>` | 결정된 큐 항목을 ADR로 승격 |
-| `/learning-add <rule>` | 가벼운 컨벤션을 `docs/learnings/`에 누적 |
-| `/spec-new <title> [--style=ears\|gherkin]` | 스펙 스캐폴드 |
-
-## 호환되는 어시스턴트
-
-- Codex, OpenAI Agents SDK 등 — `AGENTS.md` 자동 인식
-- Claude Code — `CLAUDE.md` (정본 포인터)
-- Cursor — `.cursor/rules/00-entry.mdc` (정본 포인터)
-- Aider, Continue.dev, Windsurf, Cline, Zed 등 — `AGENTS.md`를 직접 참조하거나 각 도구의 1줄 포인터 파일을 추가
-
-새 어시스턴트 지원이 필요하면 진입파일을 `AGENTS.md`로 향하는 1줄 포인터로만 추가한다. 규칙 본문은 절대 복제하지 않는다.
+MVP/해커톤 출품 — 별도 라이선스 미정. 외부 공유 전 권한 확인.
