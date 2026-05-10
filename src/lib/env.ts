@@ -21,7 +21,8 @@ export const env = {
 };
 
 export const serverEnv = {
-  llmApiKey: process.env.LLM_API_KEY ?? "",
+  llmApiKey:
+    process.env.ANTHROPIC_API_KEY ?? process.env.LLM_API_KEY ?? "",
   llmModel: process.env.LLM_MODEL || "claude-haiku-4-5-20251001",
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
 };
