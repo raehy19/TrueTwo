@@ -453,6 +453,55 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 .stack .k { opacity: .55; letter-spacing: .12em; text-transform: uppercase; }
 .stack .v { font-weight: 700; }
 
+/* slide 8 — QR + tight stack rows */
+.qr-wrap {
+  display: grid; place-items: center;
+  margin-top: clamp(8px, 1.6vh, 16px);
+}
+.qr {
+  width: clamp(160px, 22vw, 240px);
+  height: clamp(160px, 22vw, 240px);
+  background: #fbf7ee;
+  padding: clamp(8px, 1vw, 14px);
+  border-radius: clamp(10px, 1.2vw, 16px);
+  box-shadow: 0 14px 40px -16px rgba(0,0,0,.45);
+  image-rendering: -webkit-optimize-contrast;
+}
+.qr-hint {
+  margin-top: .55em;
+  font-family: var(--font-mono);
+  font-size: clamp(.6rem, .8vw, .72rem);
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,.6);
+}
+.stack-tight {
+  display: grid; gap: clamp(6px, 1vh, 10px);
+  margin-top: clamp(14px, 2vh, 22px);
+  font-family: var(--font-mono);
+  font-size: clamp(.62rem, .8vw, .74rem);
+  color: var(--card-ink);
+}
+.stack-tight > div {
+  display: grid;
+  grid-template-columns: clamp(60px, 6vw, 84px) 1fr;
+  gap: .7em;
+  align-items: baseline;
+}
+.stack-tight .k {
+  opacity: .55;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.stack-tight .v { font-weight: 600; }
+.stack-tight code {
+  font-family: var(--font-mono);
+  background: rgba(0,0,0,.1);
+  padding: .05em .35em;
+  border-radius: 4px;
+}
+
 </style>
 </head>
 <body>
@@ -683,32 +732,33 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 </section>
 
 
-<!-- ========== SLIDE 8 — STATUS ========== -->
-<section class="slide" data-title="현재 상태">
+<!-- ========== SLIDE 8 — TRY IT NOW (CTA + QR) ========== -->
+<section class="slide" data-title="지금 바로">
   <div class="meta">
-    <div class="num reveal">08<small>STATUS · 오늘 시연 가능</small></div>
+    <div class="num reveal">08<small>TRY IT NOW · 지금 바로</small></div>
     <div class="title">
-      <h2 class="reveal">DB는 켜졌고,<br/>가족 1팀은 이미<br/><span class="accent">하루진진거</span>를 풀고 있다.</h2>
-      <p class="tag reveal">스키마·RLS·트리거·RPC + Next.js 15 핵심 흐름 적용 완료. 4명 가족 + 5건 진진거 + 14개 댓글 + 1건 공개 게시물 시드. 발표 종료 시점에 핵심 루프 시연.</p>
+      <h2 class="reveal">지금 가족<br/>단톡방에<br/><span class="accent">던지세요.</span></h2>
+      <p class="tag reveal">QR 한 번이면 5분 안에 핵심 루프 전부를 직접 경험할 수 있어요. 데모 가족이 이미 준비돼 있어 회원가입만 해도 진진거를 풀어볼 수 있습니다.</p>
     </div>
     <div class="bottom-row reveal">
-      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span><b>07 STATUS</b></span>
+      <span class="crumb">01 PROBLEM<span class="sep">·</span>02 IDEA<span class="sep">·</span>03 LOOP<span class="sep">·</span>04 DEMO<span class="sep">·</span>05 RANK<span class="sep">·</span>06 BOARD<span class="sep">·</span><b>07 TRY IT</b></span>
       <span>08 / 08</span>
     </div>
   </div>
 
   <article class="card reveal">
     <div>
-      <div class="kicker">스택 + 오늘의 진척</div>
-      <div class="headline" style="font-size: clamp(1.6rem, 3.4vw, 2.6rem);">하루진진거 v0.1<br/><span style="font-size: .55em;">spec → schema → seed → app</span></div>
-      <div class="stack">
-        <div class="row"><div class="k">FE</div><div class="v">Next.js 15 · App Router</div></div>
-        <div class="row"><div class="k">HOSTING</div><div class="v">Vercel</div></div>
-        <div class="row"><div class="k">BACKEND</div><div class="v">Supabase Postgres + RLS</div></div>
-        <div class="row"><div class="k">AUTH</div><div class="v">Email · Confirm OFF</div></div>
-        <div class="row"><div class="k">LLM</div><div class="v">Anthropic Haiku 4.5</div></div>
-        <div class="row"><div class="k">SEED</div><div class="v">콩가족 4명 · 진진거 5</div></div>
-      </div>
+      <div class="kicker">스캔 · 또는 URL</div>
+      <div class="headline" style="font-size: clamp(1.2rem, 2.4vw, 1.8rem); font-family: var(--font-mono); letter-spacing: -.01em; line-height: 1.05;">true-two-taupe<br/>.vercel.app</div>
+    </div>
+    <div class="qr-wrap">
+      <img class="qr" src="screenshots/qr-app.png" alt="앱 URL QR 코드 — true-two-taupe.vercel.app/login" />
+      <div class="qr-hint">카메라로 스캔</div>
+    </div>
+    <div class="stack-tight">
+      <div><span class="k">스택</span><span class="v">Next.js 15 · Supabase · Anthropic Haiku 4.5</span></div>
+      <div><span class="k">시드</span><span class="v">콩가족 K7M3PQ · 진진거 5건 · 댓글 14건</span></div>
+      <div><span class="k">데모 계정</span><span class="v">mom / dad / sis / me @jinjin.demo · pw <code>password123</code></span></div>
     </div>
     <div class="cta">가족이 들어오면 게임은 시작된다<span class="arrow"></span></div>
   </article>
