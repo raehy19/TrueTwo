@@ -27,3 +27,4 @@ temp/
 .lychee/
 .lychee-cache/
 .markdownlint-cache/
+supabase/.temp/

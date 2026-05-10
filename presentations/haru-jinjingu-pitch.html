@@ -273,30 +273,33 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 }
 
 /* Slide-specific */
+/* .bigstat 는 오렌지 카드 안에서 쓰이므로 카드 잉크(다크) 색을 쓴다.
+   accent-warm을 그대로 쓰면 카드 배경과 겹쳐 텍스트가 사라짐. */
 .bigstat {
   font-family: var(--font-display);
   font-size: clamp(3rem, 7.5vw, 6rem);
   line-height: .9;
-  color: var(--accent-warm);
+  color: var(--card-ink);
   margin-bottom: .25em;
 }
 .bigstat small {
-  font-family: var(--font-body); font-weight: 500; font-size: clamp(.8rem, 1vw, .95rem);
-  display: block; color: var(--text-muted); letter-spacing: .25em; text-transform: uppercase; margin-top: .4em;
+  font-family: var(--font-body); font-weight: 600; font-size: clamp(.8rem, 1vw, .95rem);
+  display: block; color: rgba(0,0,0,.55); letter-spacing: .25em; text-transform: uppercase; margin-top: .4em;
 }
 .three-quotes { display: grid; gap: clamp(12px, 1.6vh, 18px); margin-top: clamp(14px, 2.2vh, 22px); }
+/* three-quotes 도 오렌지 카드 안에서 쓰이므로 다크 잉크 + 어두운 strong 으로 가독성 확보 */
 .three-quotes li {
   list-style: none;
   font-family: var(--font-body); font-weight: 500;
   font-size: clamp(.85rem, 1.1vw, 1rem); line-height: 1.4;
-  color: var(--text-secondary);
+  color: rgba(0,0,0,.7);
   padding-left: 1.1em; position: relative;
 }
 .three-quotes li::before {
   content: ""; position: absolute; left: 0; top: .55em;
-  width: .55em; height: 1px; background: var(--accent-warm);
+  width: .55em; height: 1px; background: var(--card-ink);
 }
-.three-quotes li strong { color: #fff; font-weight: 600; }
+.three-quotes li strong { color: var(--card-ink); font-weight: 700; }
 
 .loop {
   display: grid;
@@ -328,6 +331,35 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
   box-shadow: 0 30px 80px -30px rgba(0,0,0,.6);
   overflow: hidden;
   display: grid; grid-template-rows: auto 1fr;
+}
+/* 실제 앱 스크린샷을 폰 프레임 안에 끼우는 변형 */
+.phone.real { background: #fbf7ee; }
+.phone.real img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  display: block;
+}
+.shot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 1.4vw, 18px);
+  margin-top: clamp(14px, 2vh, 22px);
+}
+.shot {
+  position: relative;
+  aspect-ratio: 9 / 18;
+  border-radius: clamp(14px, 1.6vw, 20px);
+  overflow: hidden;
+  background: #fbf7ee;
+  border: 1px solid rgba(0,0,0,.12);
+  box-shadow: 0 20px 40px -18px rgba(0,0,0,.45);
+}
+.shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.shot .cap {
+  position: absolute; left: 8px; bottom: 8px;
+  background: rgba(0,0,0,.72); color: #fff;
+  font-family: var(--font-mono); font-size: clamp(.55rem, .7vw, .65rem);
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: .25em .55em; border-radius: 4px;
 }
 .phone .top { height: clamp(20px, 2.2vw, 28px); background: #0b0b0b; position: relative; }
 .phone .top::after {
@@ -572,26 +604,10 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
       <div class="headline" style="color:#fff;">가족 3명 중<br/><span style="color: var(--accent-warm);">2명</span>이 맞혔다.</div>
     </div>
     <div style="display: grid; place-items: center; padding: clamp(12px, 2vh, 22px) 0;">
-      <div class="phone" aria-hidden="true">
+      <!-- 실제 배포된 https://true-two-taupe.vercel.app 의 결과 화면 -->
+      <div class="phone real" aria-label="실제 결과 화면 스크린샷">
         <div class="top"></div>
-        <div class="scr">
-          <div>
-            <div class="pt">결과 · 나의 진진거</div>
-            <h3>진짜는 ✅, 가짜는 ❌</h3>
-          </div>
-          <div class="opts">
-            <div class="opt true"><span></span><span>회의에서 발표 칭찬받음</span><span class="badge">TRUE</span></div>
-            <div class="opt true"><span></span><span>점심 못 먹고 커피 4잔</span><span class="badge">TRUE</span></div>
-            <div class="opt fake"><span></span><span>퇴근길 초등 친구 우연 만남</span><span class="badge">FAKE</span></div>
-          </div>
-          <div>
-            <div class="ai"><b>AI 코멘트</b> · 가족 3명 중 2명이 맞혔어요. 점심 거르고 커피 4잔은 진짜라 엄마가 걱정합니다.</div>
-            <div class="qchips">
-              <span class="qchip">어떤 발표였길래?</span>
-              <span class="qchip">점심 왜 못 먹었어?</span>
-            </div>
-          </div>
-        </div>
+        <img src="screenshots/04-result-real-day.png" alt="진진거 결과 화면 — 정답률 67% 속임률 33%, 진짜 2개 + 가짜 1개와 가족 댓글" />
       </div>
     </div>
     <div class="cta" style="color: var(--accent-warm); border-color: rgba(255,87,34,.35);">진짜 하루 질문이 댓글이 된다<span class="arrow"></span></div>
@@ -615,16 +631,20 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 
   <article class="card reveal">
     <div>
-      <div class="kicker">이번 주 가족 랭킹</div>
-      <div class="headline" style="font-size: clamp(1.6rem, 3.6vw, 2.8rem);">탐정왕 / 거짓 설계자 / 순수한 마음상 / 리액션 장인 / 질문왕</div>
-      <ul class="featlist">
-        <li><span class="badge">탐정</span><span><b>가족 탐정</b> — 가짜를 가장 잘 맞힌 사람.</span></li>
-        <li><span class="badge">설계</span><span><b>거짓 설계자</b> — 본인 진진거에서 가족이 가장 많이 속은 사람.</span></li>
-        <li><span class="badge">마음</span><span><b>순수한 마음상</b> — 가장 자주 속은 사람을 부드럽게 호명.</span></li>
-        <li><span class="badge">반응</span><span><b>리액션 장인</b> + <b>질문왕</b> — 답글의 톤까지 점수화.</span></li>
-      </ul>
+      <div class="kicker">실제 화면 — 홈 + 가족</div>
+      <div class="headline" style="font-size: clamp(1.4rem, 2.8vw, 2rem);">탐정 · 거짓 설계자 · 순수한 마음상 · 리액션 장인 · 질문왕</div>
     </div>
-    <div class="cta">+ 가족 케미 맵 NxN<span class="arrow"></span></div>
+    <div class="shot-grid">
+      <div class="shot">
+        <img src="screenshots/01-home-me.png" alt="홈 화면 — 오늘 진진거, 풀어야 할 진진거, 최근 결과, 이번 주 가족 랭킹" />
+        <span class="cap">홈 · 가족 랭킹</span>
+      </div>
+      <div class="shot">
+        <img src="screenshots/02-family.png" alt="가족 페이지 — 콩가족 코드 K7M3PQ + 멤버 4명" />
+        <span class="cap">가족 · 코드 K7M3PQ</span>
+      </div>
+    </div>
+    <div class="cta">아무도 일방적으로 비참해지지 않는다<span class="arrow"></span></div>
   </article>
 </section>
 
@@ -645,16 +665,20 @@ img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
 
   <article class="card reveal">
     <div>
-      <div class="kicker">오늘의 레전드</div>
-      <div class="headline" style="font-size: clamp(1.6rem, 3.4vw, 2.6rem);">"아빠가 리모컨을<br/>냉장고에서 찾았다."</div>
-      <p class="body">속임률 0% — 가족 모두가 "이건 너무 아빠스러움"으로 정답을 맞혔다. 다른 가족도 78%가 맞혔지만 댓글은 28개.</p>
-      <div class="deck">
-        <span class="chip">👍 342</span>
-        <span class="chip">💬 28</span>
-        <span class="chip">정답 보기</span>
+      <div class="kicker">실제 화면 — 게시판 + 상세</div>
+      <div class="headline" style="font-size: clamp(1.4rem, 2.8vw, 2rem);">"아빠가 리모컨을<br/>냉장고에서 찾았다."</div>
+    </div>
+    <div class="shot-grid">
+      <div class="shot">
+        <img src="screenshots/03-board.png" alt="남의 집 진진거 게시판 — 익명 공유된 다른 가족 진진거 리스트" />
+        <span class="cap">게시판 리스트</span>
+      </div>
+      <div class="shot">
+        <img src="screenshots/05-board-detail.png" alt="게시판 상세 — 옵션 3개 + 정답 보기 + 업보트" />
+        <span class="cap">상세 · 정답 가림</span>
       </div>
     </div>
-    <div class="cta">"우리도 해볼까?"<span class="arrow"></span></div>
+    <div class="cta">"우리도 해볼까?" — 신규 가족 유입 채널<span class="arrow"></span></div>
   </article>
 </section>
 
