@@ -1,36 +1,33 @@
-# Architecture Guide
+# Architecture
 
-This directory is for system-structure records after the product brief is defined.
+## Files
 
-## Active documents
-- [data-model.md](data-model.md) — Supabase / Postgres schema (single SoT)
+- [`data-model.md`](data-model.md) — Supabase 데이터 모델 단일 SoT (테이블 14, ENUM 11, RPC 7, 트리거 9, 안전 뷰 6, RLS 정책, **§15 Production Safety Review**)
+- [`adr/`](adr/) — Architecture Decision Records
+  - **ADR-0001** Tech stack — Next.js 15 + Vercel + Supabase + Anthropic Claude Haiku 4.5
+  - **ADR-0002** 1인 1가족 제약 (v1.1 다중 가족 마이그레이션 경로 포함)
+  - **ADR-0003** 모든 일자/주는 Asia/Seoul 자정 기준
+  - **ADR-0004** 모든 변경은 `security definer` RPC + RLS + 안전 뷰 패턴 — 클라이언트 base table 직접 INSERT/UPDATE/DELETE 금지
 
-## Tech stack (locked)
-- **Frontend**: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui
-- **Hosting**: Vercel (Edge + Serverless), preview/production split
-- **Backend / DB / Auth**: Supabase (Postgres + Auth + RLS, Edge Functions optional)
-- **LLM**: single provider (가짜 생성 / 익명화 / AI 코멘트 / 캐릭터 코멘트)
-- See PRD §12 for the rationale and environment variables.
+## Stack
 
-## Stack diagram
-
-```text
+```
 [Browser]
    │ HTTPS
    ▼
-[Vercel — Next.js App Router]
-   ├── Static / RSC pages
-   ├── Route Handlers ──► LLM API (server only, secret keys)
-   └── @supabase/ssr  ──► Supabase Auth (Google OAuth)
-                        └► Postgres (public/private/auditing schemas + RLS)
+[Vercel — Next.js 15 App Router]
+   ├── RSC pages (auth / onboarding / home / quiz / family / board)
+   ├── Route Handlers (/api/ai)  ──► Anthropic Claude Haiku 4.5
+   └── @supabase/ssr             ──► Supabase Auth (Email/Password, no confirm)
+                                  └► Postgres
+                                       public/    가족 자원 (RLS + 안전 뷰)
+                                       private/   신고 큐, 익명화 매핑 (deny all)
+                                       auditing/  llm_usage 비용 로그 (deny all)
 ```
 
-## Docs to add later
-- System context (sequence diagrams for the core loop)
-- Deployment and operations structure (Vercel preview policy, Supabase env tiers)
-- Recovery and observability strategy (LLM cost guardrail dashboards)
+## 보안 핵심
 
-## ADR Rules
-- Record structurally meaningful decisions in `adr/`.
-- Include background, options, final decision, consequences, and rollback impact.
-- If product intent is still unclear, send the item to the approval queue before creating an ADR.
+- 정답 컬럼(`quiz_option.kind`, `public_post.false_option_index`, `public_post.family_id`)은 **base SELECT가 revoke**되어 있고, 안전 뷰(`quiz_option_safe_v` / `public_post_safe_v`)로만 노출됩니다.
+- 모든 RPC는 `set search_path = public, pg_temp` + `auth.uid()` 검증 + `is_family_member()` 검증 + `revoke from anon`으로 잠겨 있습니다.
+- 가족 정원 8명, 1인 1가족, 1일 1판 등 비즈니스 규칙이 모두 DB 레벨에서 강제됩니다.
+- 자세한 발견·처치·잔여 리스크 매트릭스는 `data-model.md` §15 참조.

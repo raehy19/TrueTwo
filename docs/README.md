@@ -1,68 +1,49 @@
-# Documentation Operating Map
+# 하루진진거 — 문서 인덱스
 
-This directory is the operational baseline of the project. Start new sessions here.
+해커톤 출품용 핵심 문서만 4개 카테고리로 정리했다. 첫 진입은 [`/README.md`](../README.md)에서 시작.
 
-## Language Split
-- `agent/`, `operations/`, `architecture/`, `qa/`, and assistant entry files are agent-facing and should stay in English.
-- `templates/` is also agent-facing and should stay in English.
-- `project/` and most product-planning content may stay in Korean.
-- If one document mixes both concerns, keep the structure and control language in English.
+## 1. Product (Korean)
 
-## Read Order
-1. [Session Start (one-page)](agent/SESSION_START.md)
-2. [Canonical Entry — AGENTS.md](../AGENTS.md)
-3. [Shared Agent Workflow](agent/WORKFLOW.md)
-4. [Agent Context Index](agent/INDEX.md)
-5. [Documentation Governance](DOCUMENTATION_SYSTEM.md)
-6. [Current State / Session Recovery](operations/current-state.md)
-7. [Prioritized TODO Plan](operations/todo-plan.md)
-8. [Pending Approval Queue](operations/approval-queue.md)
-9. [Core Workflow](operations/workflow.md)
-10. [Project Bootstrap Checklist](operations/bootstrap-checklist.md)
-11. [Documentation Foundation Plan](plans/documentation-foundation-plan.md)
-12. [Product Brief Draft](project/product-brief.md)
-13. [Brand Positioning](project/brand-positioning.md)
-14. [PRD](project/PRD.md)
-15. [E2E Scenario Checklist](qa/e2e-scenarios.md)
-16. [Specs Directory](specs/README.md)
-17. [Architecture Guide](architecture/README.md)
-18. [Learnings](learnings/README.md)
-19. [Secrets and MCP Policy](agent/SECRETS_POLICY.md)
-20. [Apply Harness to an Existing Repo](agent/APPLY_HARNESS.md)
-21. [Status Report Policy](agent/status_report.md)
-22. [Document Templates](templates/README.md)
+- [`project/product-brief.md`](project/product-brief.md) — 제품 한 줄 정의·1차 사용자·MVP 범위·성공 기준
+- [`project/brand-positioning.md`](project/brand-positioning.md) — 브랜드 문장·문제 정의·핵심 가치·톤
+- [`project/PRD.md`](project/PRD.md) — 16섹션 PRD (B-1~B-12 비즈니스 규칙, NFR, 릴리스 계획, glossary)
+- [`project/2026_0510_1529_concept_alignment_review.md`](project/2026_0510_1529_concept_alignment_review.md) — 콘셉트 정합성 점검
 
-## Directory Purpose
-- `agent/`: shared assistant workflow, session snapshot, read index, browser policy, status-report guidance, secrets policy
-- `project/`: problem definition, target users, requirements, scope
-- `specs/`: per-feature behavior specs (EARS or Gherkin) before code
-- `plans/`: dated plans and design documents
-- `architecture/`: system structure and ADRs
-- `operations/`: session recovery, TODOs, approvals, workflow
-- `qa/`: E2E scenarios, risk, validation viewpoints
-- `learnings/`: lightweight repo-wide conventions (lighter than ADRs)
-- `status/`: formal handoff or milestone reports, with archive for older reports
-- `templates/`: reusable document templates
+## 2. Specs (Korean, Gherkin/EARS)
 
-## Required Operating Docs
-- `operations/current-state.md`
-- `operations/todo-plan.md`
-- `operations/approval-queue.md`
-- `qa/e2e-scenarios.md`
+각 기능 1개 = 1개 spec. PRD §7 기능 맵과 1:1 대응.
 
-## Formal Reporting
-- `operations/current-state.md` is the living session-recovery log.
-- `status/` is for milestone, handoff, or explicitly requested status reports.
-- Archive older formal reports under `status/archive/`.
+- [`specs/2026-05-10-auth-google-login.md`](specs/2026-05-10-auth-google-login.md) — F1 인증 (이메일/비밀번호, 무검증)
+- [`specs/2026-05-10-family-workspace.md`](specs/2026-05-10-family-workspace.md) — F2 가족 워크스페이스 (6자리 코드)
+- [`specs/2026-05-10-daily-quiz-registration.md`](specs/2026-05-10-daily-quiz-registration.md) — F3 일일 진진거 등록 라이프사이클
+- [`specs/2026-05-10-ai-lie-generation.md`](specs/2026-05-10-ai-lie-generation.md) — F4 AI 가짜 후보 생성 + 사용자 편집
+- [`specs/2026-05-10-quiz-answer-results.md`](specs/2026-05-10-quiz-answer-results.md) — F5 풀이 / 결과 / AI 코멘트 / 진짜 하루 질문
+- [`specs/2026-05-10-family-ranking.md`](specs/2026-05-10-family-ranking.md) — F6 가족 랭킹 5종 + 댓글
+- [`specs/2026-05-10-public-board.md`](specs/2026-05-10-public-board.md) — F7 남의 집 진진거 게시판
+- [`specs/2026-05-10-dashboard.md`](specs/2026-05-10-dashboard.md) — F8 가족 대시보드 + 케미 맵
 
-## Conflict Handling
-- Do not resolve documentation conflicts by guesswork.
-- Record the conflict in `operations/approval-queue.md`.
-- Until resolved, apply the most conservative interpretation.
+## 3. Architecture (English)
 
-## New Session Checklist
-- Read the current-state doc.
-- Check TODO priorities.
-- Review pending approval items.
-- Select the next safe task.
-- Update the relevant docs immediately after changes.
+- [`architecture/data-model.md`](architecture/data-model.md) — Supabase 데이터 모델 단일 SoT (테이블 14, ENUM 11, RPC 7, 트리거 9, 안전 뷰 6, RLS 정책, **§15 Production Safety Review** — 12 findings & mitigations)
+- [`architecture/adr/2026-05-10-tech-stack.md`](architecture/adr/2026-05-10-tech-stack.md) — ADR-0001 Next.js + Vercel + Supabase + Anthropic
+- [`architecture/adr/2026-05-10-one-family-per-user.md`](architecture/adr/2026-05-10-one-family-per-user.md) — ADR-0002 1인 1가족 (v1.1 다중 가족 마이그레이션 경로 포함)
+- [`architecture/adr/2026-05-10-kst-time-handling.md`](architecture/adr/2026-05-10-kst-time-handling.md) — ADR-0003 모든 일자/주는 Asia/Seoul
+- [`architecture/adr/2026-05-10-rls-rpc-pattern.md`](architecture/adr/2026-05-10-rls-rpc-pattern.md) — ADR-0004 RPC + RLS + 안전 뷰 패턴
+
+## 4. QA (English)
+
+- [`qa/e2e-scenarios.md`](qa/e2e-scenarios.md) — 5개 핵심 사용 여정 (가족 셋업 / 진진거 생성 / 풀이 + 진짜 하루 / 대시보드 / 공개 게시판)
+
+---
+
+## 한 눈에
+
+```
+docs/
+├── project/        제품 정의 (브리프 / 브랜드 / PRD)
+├── specs/          F1~F8 기능 스펙
+├── architecture/   DB SoT + ADR
+└── qa/             E2E 시나리오
+```
+
+기능 → spec → DB SoT → 시나리오까지 흐름이 직선으로 연결돼 있다.
