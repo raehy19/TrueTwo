@@ -12,7 +12,7 @@ Related:
 - Product brief section: 핵심 시나리오 4 "가족 랭킹과 누적 통계"
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F6, §8 UX 원칙 4
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`Family Solves And Finds The Real Day`](../qa/e2e-scenarios.md), [`Family Retention Dashboard`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 진진거 결과를 단순 정답률 1차원이 아닌 5종의 부드럽고 다양한 랭킹으로 표현해 가족 누구도 일방적으로 비참해지지 않으면서 매주 새로운 재미를 만든다. 더불어 가족이 결과 화면과 대시보드에서 자유롭게 코멘트를 주고받을 수 있는 기본 댓글을 제공한다.

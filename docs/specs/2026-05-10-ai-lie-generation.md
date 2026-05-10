@@ -12,7 +12,7 @@ Related:
 - Product brief section: 핵심 시나리오 2 후반(AI 가짜 후보)
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F4, §8 UX 원칙 1, §9 B-11
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`Daily 진진거 Creation`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 사용자가 진짜 일 2개를 입력하면 AI가 가족이 헷갈릴 만한 가짜 3개를 즉시 제안하고, 사용자가 그 중 하나를 골라 직접 다듬어 "사람의 손길이 들어간 가짜"로 등록할 수 있게 한다.

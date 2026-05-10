@@ -12,7 +12,7 @@ Related:
 - Product brief section: 핵심 시나리오 2 "하루 진진거 등록"
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F3, §9 B-4/B-5/B-6/B-7/B-8/B-9, OQ-7
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`Daily 진진거 Creation`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 한 가족 멤버가 하루 1개 진진거를 등록하고 즉시 가족이 풀 수 있게 만든다. 어제 등록을 놓친 경우 오늘 한 번 더 등록해 전일치를 만들 수 있다.

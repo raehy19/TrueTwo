@@ -12,7 +12,7 @@ Related:
 - Product brief section: 핵심 시나리오 5 "남의 집 진진거 공유"
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F7, §8 UX 원칙 5, §9 B-10/B-11
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`Public Board Sharing`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 가족 안에서 결과 공개된 진진거 중 재밌거나 따뜻한 것을 출제자가 명시적으로 동의해 익명화된 형태로 전체 게시판에 올리고, 다른 사용자들이 정답을 추리하고 업보트로 반응할 수 있게 한다.

@@ -61,7 +61,7 @@ must match a released state, follow the versioned-doc rules in
 - F2 [`2026-05-10-family-workspace.md`](2026-05-10-family-workspace.md) — 가족 생성/참여/6자리 코드
 - F3 [`2026-05-10-daily-quiz-registration.md`](2026-05-10-daily-quiz-registration.md) — 일일 진진거 등록 라이프사이클
 - F4 [`2026-05-10-ai-lie-generation.md`](2026-05-10-ai-lie-generation.md) — AI 가짜 후보 생성 + 사용자 편집
-- F5 [`2026-05-10-quiz-answer-results.md`](2026-05-10-quiz-answer-results.md) — 풀이/결과 공개/AI 자동 코멘트
+- F5 [`2026-05-10-quiz-answer-results.md`](2026-05-10-quiz-answer-results.md) — 풀이/결과 공개/AI 자동 코멘트/진짜 하루 질문
 - F6 [`2026-05-10-family-ranking.md`](2026-05-10-family-ranking.md) — 가족 랭킹 5종 + 댓글
 - F7 [`2026-05-10-public-board.md`](2026-05-10-public-board.md) — 남의 집 진진거 공개 게시판
 - F8 [`2026-05-10-dashboard.md`](2026-05-10-dashboard.md) — 가족 대시보드 + 케미 맵

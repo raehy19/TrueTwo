@@ -5,12 +5,13 @@ This page summarizes the **current** operating state. Do not put policies here �
 policies belong in `AGENTS.md` and `WORKFLOW.md`.
 
 Last refreshed:
-- 2026-05-03 (UTC+09:00)
+- 2026-05-10 (UTC+09:00)
 
 ## What this repository is
 
-Documentation-first project starter. No application code exists yet. The goal is
-to lock product direction and operating discipline before implementation begins.
+Documentation-first 진진거 project. No application code exists yet. The goal is
+to lock the product direction, MVP scope, and operating discipline before
+implementation begins.
 
 ## Read order on session start
 
@@ -24,14 +25,19 @@ If a doc here disagrees with `AGENTS.md`, `AGENTS.md` wins.
 
 ## Current phase
 
-Phase 0 — documentation starter baseline. No app code. No architecture lock-in.
+Phase 0 — product definition draft. No app code. Architecture and platform
+choices are drafted but still need approval-queue resolution before bootstrap.
 
 ## Active focus
 
-- The harness is now standardized on `AGENTS.md` as the canonical entry.
+- 진진거 product brief, PRD, brand positioning, feature specs, and E2E scenario
+  baselines exist in `docs/project/`, `docs/specs/`, and `docs/qa/`.
+- The strongest product framing is: "가족은 거짓을 맞히러 들어오지만,
+  결국 서로의 진짜 하루를 알게 된다."
+- Approval items for problem statement, MVP scope, and platform remain open until
+  the team explicitly resolves and routes them.
 - Verification automation (lefthook, markdownlint, lychee, gitleaks) is configured
   but not necessarily installed locally yet. CI runs them on every PR.
-- Specs, learnings, and approval-queue exit rules are now in place but mostly empty.
 
 ## What is safe to do without approval
 
@@ -50,12 +56,9 @@ Phase 0 — documentation starter baseline. No app code. No architecture lock-in
 
 ## Critical unknowns
 
-- Product problem statement
-- Primary user
-- Core user flows
-- MVP scope (in / out)
-- Tech stack
-- Platform scope
+- Formal approval of the drafted problem statement and primary user
+- Formal approval of MVP in-scope/out-of-scope boundaries
+- Formal approval of platform and bootstrap strategy
 - License decision
 
 ## Pointers for the most common follow-ups
@@ -64,6 +67,10 @@ Phase 0 — documentation starter baseline. No app code. No architecture lock-in
 - Active priorities: `docs/operations/todo-plan.md`
 - Live recovery log: `docs/operations/current-state.md`
 - Product brief draft: `docs/project/product-brief.md`
+- Brand positioning: `docs/project/brand-positioning.md`
+- Concept alignment review: `docs/project/2026_0510_1529_concept_alignment_review.md`
+- PRD: `docs/project/PRD.md`
+- E2E baseline: `docs/qa/e2e-scenarios.md`
 - Spec scaffolding: `docs/specs/README.md`
 - Lightweight conventions: `docs/learnings/README.md`
 - Secrets and MCP token policy: `docs/agent/SECRETS_POLICY.md`

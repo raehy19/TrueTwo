@@ -12,7 +12,7 @@ Related:
 - Product brief section: 핵심 시나리오 1 "가족 만들기 + 가입"
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F2, §9 B-2/B-3/B-12
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`First Entry And Family Setup`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 가족 한 명이 30초 안에 가족을 만들고, 다른 구성원이 코드 한 번 입력으로 가입해서 즉시 함께 진진거를 시작할 수 있다.

@@ -12,7 +12,7 @@ Related:
 - Product brief section: 1차 사용자 / 핵심 시나리오 1
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F1, §9 B-1
 - ADR: 없음
-- E2E scenario: TBD (`docs/qa/e2e-scenarios.md`)
+- E2E scenario: [`First Entry And Family Setup`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 가족 단톡방에서 받은 링크로 진입한 사용자가 30초 안에 구글 로그인까지 마치고 다음 단계(가족 만들기/가입)로 이동한다.

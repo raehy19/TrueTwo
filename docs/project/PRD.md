@@ -2,6 +2,7 @@
 
 > 본 문서는 진진거 서비스 전체의 PRD(Product Requirements Document)이다.
 > 상위 한 줄 정의·MVP 범위는 [`product-brief.md`](product-brief.md)를 따른다.
+> 브랜드 문장·문제 정의·카피 기준은 [`brand-positioning.md`](brand-positioning.md)를 따른다.
 > 기능별 세부 동작은 [`docs/specs/`](../specs/README.md)의 개별 스펙을 참조한다.
 > 본 문서는 evergreen이다. 결정이 바뀌면 본 문서를 갱신하고 변경 사유는 ADR/approval-queue로 남긴다.
 
@@ -100,7 +101,7 @@
    ↓
 [Step 4] 가족: 가짜 추리 + 한 줄 이유 입력
    ↓
-[Step 5] 결과 공개: 누가 맞혔는지 + AI 자동 코멘트 + 가족 댓글
+[Step 5] 결과 공개: 누가 맞혔는지 + AI 자동 코멘트 + 진짜 하루 질문 + 가족 댓글
    ↓
 [Step 6] (옵션) 익명화하여 "남의 집 진진거" 게시판에 공유
    ↓
@@ -160,7 +161,7 @@
 | F2 | 가족 워크스페이스 (생성/참여/코드) | [`2026-05-10-family-workspace.md`](../specs/2026-05-10-family-workspace.md) |
 | F3 | 일일 진진거 등록 라이프사이클 | [`2026-05-10-daily-quiz-registration.md`](../specs/2026-05-10-daily-quiz-registration.md) |
 | F4 | AI 가짜 후보 생성 + 사용자 편집 | [`2026-05-10-ai-lie-generation.md`](../specs/2026-05-10-ai-lie-generation.md) |
-| F5 | 가족 풀이 / 결과 공개 / AI 코멘트 | [`2026-05-10-quiz-answer-results.md`](../specs/2026-05-10-quiz-answer-results.md) |
+| F5 | 가족 풀이 / 결과 공개 / AI 코멘트 / 진짜 하루 질문 | [`2026-05-10-quiz-answer-results.md`](../specs/2026-05-10-quiz-answer-results.md) |
 | F6 | 가족 랭킹 + 댓글 | [`2026-05-10-family-ranking.md`](../specs/2026-05-10-family-ranking.md) |
 | F7 | 남의 집 진진거 공개 게시판 | [`2026-05-10-public-board.md`](../specs/2026-05-10-public-board.md) |
 | F8 | 가족 대시보드 + 케미 맵 | [`2026-05-10-dashboard.md`](../specs/2026-05-10-dashboard.md) |
@@ -231,7 +232,7 @@ F1(로그인) → F2(가족) → F3(등록) → F4(AI 생성)
 
 ## 12. Dependencies
 
-### 기술 스택 (확정)
+### 기술 스택 (드래프트)
 - **프론트엔드**: Next.js (App Router) + TypeScript. UI는 Tailwind + shadcn/ui 기반.
 - **호스팅**: Vercel (Edge Network + Serverless Functions). 미리보기/프로덕션 분리.
 - **백엔드 / DB / Auth / Storage**: Supabase.
@@ -240,12 +241,12 @@ F1(로그인) → F2(가족) → F3(등록) → F4(AI 생성)
   - Row Level Security(RLS)로 가족·게시판 권한 강제.
   - Edge Functions 또는 Next.js Route Handlers에서 LLM 호출(서버 보호용 키 보관).
   - Realtime(옵션): 결과 화면 AI 코멘트 도착, 풀이 진행 갱신에 사용 검토.
-- **LLM API**: 1개 공급사 단일화로 시작(가짜 생성/익명화/AI 코멘트/캐릭터 코멘트). 비용 가드는 PRD §9 B-11.
+- **LLM API**: 1개 공급사 단일화로 시작(가짜 생성/익명화/AI 코멘트/진짜 하루 질문/캐릭터 코멘트). 비용 가드는 PRD §9 B-11.
 - **데이터 모델 단일 SoT**: [`../architecture/data-model.md`](../architecture/data-model.md).
 
 ### 외부
 - **Google OAuth 2.0**: Supabase Auth provider로 연결. Vercel 환경변수에 클라이언트 ID/Secret 보관.
-- **LLM API**: 가짜 생성/익명화/AI 코멘트.
+- **LLM API**: 가짜 생성/익명화/AI 코멘트/진짜 하루 질문.
 
 ### 내부
 - KST 기준 일자 처리 유틸(클라/서버 동일 구현 또는 Postgres `AT TIME ZONE 'Asia/Seoul'` 사용).

@@ -13,7 +13,7 @@ Related:
 - PRD: [`../project/PRD.md`](../project/PRD.md) §7 F8, §8, Appendix B(메인 화면 와이어)
 - 의존: F3, F5, F6, F7
 - ADR: 없음
-- E2E scenario: TBD
+- E2E scenario: [`Family Retention Dashboard`](../qa/e2e-scenarios.md)
 
 ## Goal
 - 가족 한 명이 들어와도 "오늘 우리 가족 현황", "이번 주 우리 가족 랭킹", "가족 케미 맵", "남의 집 진진거 추천"을 한 화면에서 볼 수 있게 한다. 가족 사이의 관찰력·반응성을 시각화해 매일 들어올 이유를 만든다.
